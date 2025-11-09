@@ -6,6 +6,9 @@
 #include "stm32f1xx_hal.h"
 #include "usbd_cdc_if.h"
 
+#include "lcd.h"
+#include "lcd_driver.h"
+
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -59,6 +62,13 @@ void app_main() {
 
   HAL_CAN_AddTxMessage(&hcan, &s_tx_header, (uint8_t *)s_tx_data,
                        &s_tx_mailbox);
+
+  ILI9341_Init();
+
+  ILI9341_FillScreen(WHITE);
+  ILI9341_SetRotation(SCREEN_HORIZONTAL_2);
+  ILI9341_DrawText("HELLO WORLD", FONT4, 90, 110, BLACK, WHITE);
+  HAL_Delay(1000);
 
   while (1) {
     HAL_GPIO_TogglePin(LED_PIN_GPIO_Port, LED_PIN_Pin);
