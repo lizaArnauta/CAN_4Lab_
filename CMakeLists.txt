@@ -46,6 +46,9 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     App/Src/app_main.c
+    App/Src/lcd_driver.c
+    App/Src/lcd_fonts.c
+    App/Src/lcd.c
 )
 
 # Add include paths
