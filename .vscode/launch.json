@@ -1,0 +1,21 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "cwd": "${workspaceFolder}",
+      "executable": "${cwd}/build/Debug/lab_can.elf",
+      "name": "Debug with ST-Link",
+      "request": "launch",
+      "type": "cortex-debug",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "raw",
+      "servertype": "stlink",
+      "armToolchainPath": "/home/vepbxer/.local/share/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/",
+      "serverpath": "/home/vepbxer/.local/share/stm32cube/bundles/stlink-gdbserver/7.10.0+st.3/bin/ST-LINK_gdbserver",
+      "stm32cubeprogrammer": "/home/vepbxer/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin"
+    },
+  ]
+}
