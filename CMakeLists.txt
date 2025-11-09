@@ -68,3 +68,11 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 
     # Add user defined libraries
 )
+
+set(STM32PROG /home/vepbxer/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin/STM32_Programmer_CLI)
+
+add_custom_target(flash
+    COMMAND ${STM32PROG} --connect port=SWD --download ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.elf --start
+    DEPENDS ${CMAKE_PROJECT_NAME}
+    COMMENT "Flashing ${PROJECT_NAME}.elf to STM32 using STM32CubeProgrammer"
+)
