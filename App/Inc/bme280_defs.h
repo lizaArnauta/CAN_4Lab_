@@ -89,10 +89,15 @@
 
 #define BME280_CONCAT_BYTES(msb, lsb)     (((uint16_t)msb << 8) | (uint16_t)lsb)
 
-#define BME280_SET_BITS(reg_data, bitname, data) \ ((reg_data & ~(bitname##_MSK)) | \ ((data << bitname##_POS) & bitname##_MSK))
-#define BME280_SET_BITS_POS_0(reg_data, bitname, data) \ ((reg_data & ~(bitname##_MSK)) | \ (data & bitname##_MSK))
+#define BME280_SET_BITS(reg_data, bitname, data) \
+  ((reg_data & ~(bitname##_MSK)) | \
+   ((data << bitname##_POS) & bitname##_MSK))
+#define BME280_SET_BITS_POS_0(reg_data, bitname, data) \
+ ((reg_data & ~(bitname##_MSK)) | \
+  (data & bitname##_MSK))
 
-#define BME280_GET_BITS(reg_data, bitname)  ((reg_data & (bitname##_MSK)) >> \ (bitname##_POS))
+#define BME280_GET_BITS(reg_data, bitname)  ((reg_data & (bitname##_MSK)) >> \
+ (bitname##_POS))
 #define BME280_GET_BITS_POS_0(reg_data, bitname)  (reg_data & (bitname##_MSK))
 
 #define BME280_SENSOR_MODE_MSK	UINT8_C(0x03)
