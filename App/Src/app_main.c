@@ -82,8 +82,25 @@ void app_main() {
   uint32_t id = HAL_GetUIDw0();
   const char msg[] = "Hello from %d";
 
+  CAN_FilterTypeDef s_filter_config;
   sprintf(s_tx_data, msg, id);
 
+  s_filter_config.FilterBank = 0;
+  s_filter_config.FilterMode = CAN_FILTERMODE_IDMASK;
+  s_filter_config.FilterScale = CAN_FILTERSCALE_32BIT;
+  s_filter_config.FilterIdHigh = 0x0000;
+  s_filter_config.FilterIdLow = 0x0000;
+  s_filter_config.FilterMaskIdHigh = 0x0000;
+  s_filter_config.FilterMaskIdLow = 0x0000;
+  s_filter_config.FilterFIFOAssignment = CAN_RX_FIFO0;
+  s_filter_config.FilterActivation = ENABLE;
+  s_filter_config.SlaveStartFilterBank = 14;
+
+  if (HAL_CAN_ConfigFilter(&hcan, &s_filter_config) != HAL_OK)
+  {
+      Error_Handler();
+  }
+  
   if (HAL_CAN_Start(&hcan) != HAL_OK) {
     Error_Handler();
   }
