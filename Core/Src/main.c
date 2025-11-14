@@ -23,13 +23,12 @@
 #include "i2c.h"
 #include "spi.h"
 #include "gpio.h"
-#include <stdio.h>
-#include <string.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
 #include <stm32f1xx_hal_can.h>
+#include <cstdint>
 
 /* USER CODE END Includes */
 
@@ -63,30 +62,23 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-CAN_HandleTypeDef     CanHandle;
 CAN_TxHeaderTypeDef   TxHeader;
 CAN_RxHeaderTypeDef   RxHeader;
-uint8_t               TxData[8];
-uint8_t               RxData[8];
-uint32_t              TxMailbox;
 
-int isTransmit = 0;
+uint8_t TxData[8];
+uint8_t RxData[8];
 
-void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+uint32_t datacheck;
+
+void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
-  if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
-  {
-    Error_Handler();
-  }
+  HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO1, &RxHeader, RxData)
 
-  // additional filter
-  if (strncmp((char *)RxData, "F103", RxHeader.DLC) == 0)
+  if(RxHeader.DLC == 2)
   {
-	  isTransmit = 1;
+    datacheck = 1;
   }
 }
-
-int indx = 0;
 
 /* USER CODE END 0 */
 
@@ -125,21 +117,17 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
-  // app_main();
+  HAL_CAN_Start(&hcan);
 
-  if (HAL_CAN_Start(&hcan) != HAL_OK)
-  {
-	  Error_Handler();
-  }
+  HAL_CAN_ActivateNotification(&hcan, CAN_IT_RX_FIFO1_MSG_PENDING);
 
-  HAL_CAN_ActivateNotification (&hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
-
-  TxHeader.StdId = 0x211;   // some random ID
-  TxHeader.ExtId = 0x00;
-  TxHeader.RTR = CAN_RTR_DATA;
+  TxHeader.DLC = 2;
   TxHeader.IDE = CAN_ID_STD;
-  TxHeader.DLC = 8;
-  TxHeader.TransmitGlobalTime = DISABLE;
+  TxHeader.RTR = CAN_RTR_DATA;
+  TxHeader.StdId = 0x103;
+
+  TxData[0] = 50;
+  TxData[1] = 20;
 
   /* USER CODE END 2 */
 
@@ -150,22 +138,18 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    if (isTransmit)
-	  {
-		  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-		  sprintf ((char *)TxData, "F103=%2d", indx++);
-
-		  HAL_Delay (750);
-
-		  if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK)
+    if(datacheck)
+    {
+      for(int i = 0; i < RxData[1]; i++)
       {
-			  Error_Handler ();
-		  }
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+        HAL_Delay(RxData[0]);
+      }
 
-		  isTransmit = 0;
-	  }
+      datacheck = 0;
 
-	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+      HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox);
+    }
   }
   /* USER CODE END 3 */
 }
