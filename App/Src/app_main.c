@@ -25,6 +25,8 @@ static char s_tx_data[BUF_SIZE];
 static char s_rx_data[BUF_SIZE];
 static uint32_t s_tx_mailbox;
 
+volatile uint32_t msg_counter = 0;
+
 float temperature;
 float humidity;
 float pressure;
@@ -43,10 +45,11 @@ static char s_usb_buf[BUF_SIZE * 2];
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
   if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &s_rx_header,
                            (uint8_t *)s_rx_data) != HAL_OK) {
-    Error_Handler();
+    // Error_Handler();
   }
 
   s_data_received = 1;
+  msg_counter++;
 }
 
 void user_delay_ms(uint32_t period) { HAL_Delay(period); }
@@ -100,7 +103,7 @@ void app_main() {
   {
       Error_Handler();
   }
-  
+
   if (HAL_CAN_Start(&hcan) != HAL_OK) {
     Error_Handler();
   }
