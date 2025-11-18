@@ -10,6 +10,7 @@ RM := rm -rf
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include Drivers/STM32F1xx_HAL_Driver/Src/subdir.mk
+-include Drivers/STM32F1xx_HAL_Driver/subdir.mk
 -include Drivers/CMSIS/RTOS2/Template/subdir.mk
 -include Drivers/CMSIS/RTOS2/Source/subdir.mk
 -include Drivers/CMSIS/NN/Source/SoftmaxFunctions/subdir.mk
@@ -69,6 +70,7 @@ RM := rm -rf
 -include Drivers/CMSIS/DSP/DSP_Lib_TestSuite/Common/JTest/src/subdir.mk
 -include Drivers/CMSIS/Core_A/Source/subdir.mk
 -include Drivers/CMSIS/Core/Template/ARMv8-M/subdir.mk
+-include Drivers/CMSIS/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
 -include objects.mk

@@ -81,7 +81,7 @@ int8_t user_i2c_write(uint8_t id, uint8_t reg_addr, uint8_t *data,
 
 void app_main() {
   // main
-
+  volatile	HAL_StatusTypeDef rc_can = HAL_OK;
   uint32_t id = HAL_GetUIDw0();
   const char msg[] = "Hello from %d";
 
@@ -138,8 +138,13 @@ void app_main() {
 
   HAL_Delay(1000);
 
-  HAL_CAN_AddTxMessage(&hcan, &s_tx_header, (uint8_t *)s_tx_data,
+  do
+  {
+	  rc_can = HAL_CAN_AddTxMessage(&hcan, &s_tx_header, (uint8_t *)s_tx_data,
                        &s_tx_mailbox);
+  }while (rc_can != HAL_OK);
+
+  HAL_GPIO_WritePin(LED_PIN_GPIO_Port, LED_PIN_Pin, GPIO_PIN_SET);
 
   ILI9341_Init();
 
@@ -149,7 +154,6 @@ void app_main() {
   HAL_Delay(1000);
 
   while (1) {
-    HAL_GPIO_TogglePin(LED_PIN_GPIO_Port, LED_PIN_Pin);
 
     rslt = bme280_set_sensor_mode(BME280_FORCED_MODE, &dev);
     HAL_Delay(40);
@@ -170,6 +174,8 @@ void app_main() {
       HAL_CAN_AddTxMessage(&hcan, &s_tx_header, (uint8_t *)s_tx_data,
                            &s_tx_mailbox);
       s_data_received = 0;
+
+        HAL_GPIO_TogglePin(LED_PIN_GPIO_Port, LED_PIN_Pin);
     }
 
     HAL_Delay(500);

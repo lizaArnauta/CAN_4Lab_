@@ -83,5 +83,7 @@ Drivers/CMSIS/NN/Source/PoolingFunctions \
 Drivers/CMSIS/NN/Source/SoftmaxFunctions \
 Drivers/CMSIS/RTOS2/Source \
 Drivers/CMSIS/RTOS2/Template \
+Drivers/CMSIS \
 Drivers/STM32F1xx_HAL_Driver/Src \
+Drivers/STM32F1xx_HAL_Driver \
 
