@@ -6,7 +6,7 @@
   "configurations": [
     {
       "cwd": "${workspaceFolder}",
-      "executable": "./build/lab_can.elf",
+      "executable": "./build/Debug/lab_can.elf",
       "name": "Debug with ST-Link",
       "request": "launch",
       "type": "cortex-debug",
