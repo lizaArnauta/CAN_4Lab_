@@ -49,7 +49,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     App/Src/lcd_driver.c
     App/Src/lcd_fonts.c
     App/Src/lcd.c
-    App/Src/bme280.c
+    App/Src/bme_280.c
 )
 
 # Add include paths

@@ -9,7 +9,7 @@
 #include "lcd.h"
 #include "lcd_driver.h"
 
-#include "bme280.h"
+#include "bme_280.h"
 
 #include <stdint.h>
 #include <stdio.h>

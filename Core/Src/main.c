@@ -28,7 +28,6 @@
 /* USER CODE BEGIN Includes */
 
 #include <stm32f1xx_hal_can.h>
-#include <cstdint>
 
 /* USER CODE END Includes */
 
@@ -68,11 +67,13 @@ CAN_RxHeaderTypeDef   RxHeader;
 uint8_t TxData[8];
 uint8_t RxData[8];
 
+uint32_t TxMailbox;
+
 uint32_t datacheck;
 
 void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
-  HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO1, &RxHeader, RxData)
+  HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO1, &RxHeader, RxData);
 
   if(RxHeader.DLC == 2)
   {
