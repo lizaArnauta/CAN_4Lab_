@@ -60,7 +60,8 @@ Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.c \
 Core/Src/system_stm32f1xx.c \
 Core/Src/sysmem.c \
-Core/Src/syscalls.c
+Core/Src/syscalls.c \
+App/Src/app_main.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -123,6 +124,7 @@ AS_INCLUDES =
 
 # C includes
 C_INCLUDES =  \
+-IApp/Inc \
 -ICore/Inc \
 -IDrivers/STM32F1xx_HAL_Driver/Inc \
 -IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy \
