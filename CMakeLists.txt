@@ -46,10 +46,6 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     App/Src/app_main.c
-    App/Src/lcd_driver.c
-    App/Src/lcd_fonts.c
-    App/Src/lcd.c
-    App/Src/bme280.c
 )
 
 # Add include paths
@@ -73,10 +69,20 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     # Add user defined libraries
 )
 
-set(STM32PROG /home/vepbxer/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin/STM32_Programmer_CLI)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
+find_package(STM32CubeProgrammer)
 
-add_custom_target(flash
-    COMMAND ${STM32PROG} --connect port=SWD --download ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.elf --start
-    DEPENDS ${CMAKE_PROJECT_NAME}
-    COMMENT "Flashing ${PROJECT_NAME}.elf to STM32 using STM32CubeProgrammer"
-)
+set(STM32CubeProg ${STM32CubeProgrammer_CLI_EXECUTABLE})
+
+if(STM32CubeProgrammer_FOUND)
+    add_custom_target(flash
+        COMMAND ${STM32CubeProg} --connect port=SWD --download ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.elf --start
+
+        DEPENDS
+        ${CMAKE_PROJECT_NAME}
+
+        COMMENT "Flashing ${PROJECT_NAME}.elf to STM32 using STM32CubeProgrammer"
+    )
+else()
+    message(STATUS "STM32CubeProgrammer not found, skipping flash target")
+endif()
